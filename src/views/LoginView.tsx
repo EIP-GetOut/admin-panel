@@ -26,8 +26,7 @@ const LoginView = () => {
   };
 
   return (
-    // I want to add a background image on the left side of the screen and on the right generate a forms with a login and password field on a white background
-
+  
     <Flex>
       {/* Left Half */}
       <Box
