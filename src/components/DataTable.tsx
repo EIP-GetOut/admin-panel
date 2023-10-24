@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import { Table, Thead, Tbody } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 
@@ -7,7 +6,7 @@ const DataTable = ( { datas } ) => {
     
     return (
         <Table variant="striped" colorScheme="teal">
-			<Thead>
+			<Thead textAlign="left">
 				<tr>
 					<th>User ID</th>
 					<th>Profil</th>
