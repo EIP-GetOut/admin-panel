@@ -29,9 +29,7 @@ const Header: React.FC = () => {
                 <Text marginLeft={3} fontFamily="Roboto" fontStyle={ location.pathname === '/moderation' ? 'italic' : 'normal'}> Moderation </Text>
                 {location.pathname === '/moderation' && (
                     <Divider
-                      position="absolute"
                       bottom="5"
-                      width="5%"
                       borderColor="black.500"
                       borderWidth="5px"
                       opacity="1"
@@ -43,9 +41,8 @@ const Header: React.FC = () => {
                 <Text marginLeft={440} fontFamily="Roboto"> History </Text>
                 {location.pathname === '/history' && (
                     <Divider marginLeft={400}
-                      position="absolute"
                       bottom="5"
-                      width="5%"
+                      width="20%"
                       borderColor="black.500"
                       borderWidth="5px"
                       opacity="1"
@@ -57,9 +54,8 @@ const Header: React.FC = () => {
                 <Text marginLeft={440} fontFamily="Roboto"> Users </Text>
                 {location.pathname === '/users' && (
                     <Divider marginLeft={400}
-                      position="absolute"
                       bottom="5"
-                      width="5%"
+                      width="20%"
                       borderColor="black.500"
                       borderWidth="5px"
                       opacity="1"

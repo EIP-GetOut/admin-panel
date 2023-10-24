@@ -1,0 +1,18 @@
+[
+    {
+        "id": "b5f282a4-7125-4698-8b6b-864bc8206f50",
+        "email": "yo3@yo.com",
+        "firstName": "Julien",
+        "lastName": "Letoux",
+        "bornDate": "2001-06-07",
+        "createdDate": "2023-09-27T04:31:54.339Z"
+    },
+    {
+        "id": "b5f282a4-7125-4698-8b6b-864bc8206f51",
+        "email": "test@test.com",
+        "firstName": "Tesse",
+        "lastName": "Teur",
+        "bornDate": "2001-06-07",
+        "createdDate": "2023-09-27T04:31:54.339Z"
+    }
+]
