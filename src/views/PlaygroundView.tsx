@@ -1,18 +1,20 @@
 import { Text, Box, Center, Button, Input } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import JSON from 'json5';
 import { SignInRequestService } from '../services/SignServices';
-import axios from 'axios';
 
 async function fetchData() {
 	try {
-	  const response = await axios.get('http://localhost:8080/accounts/1');
-	  console.log('Réponse du serveur :', response.data);
+	  const response = await fetch('http://localhost:8080/accounts/1');
+	  const result = await response.json()
+	  console.log(result.accounts.accountCreatedLastWeek)
+	  return parseInt(result.accounts.accountCreatedLastWeek)
 	} catch (error) {
 	  // Gérer les erreurs
 	  console.error('Erreur lors de la requête :', error);
 	}
+	return 0
   }
 
 const TestService = async (): Promise<string> => {
@@ -22,7 +24,7 @@ const TestService = async (): Promise<string> => {
 };
 
 interface RectangleAccountCreated {
-	number: number;
+	number: any;
 }
 
 interface RectangleRecommendationGenerated {
@@ -85,7 +87,7 @@ const PlaygroundView = () => {
 	const [toggle, settoggle] = useState('PLACEHOLDER');
 
 	const handleButton = () => {
-		if (toggle == 'PLACEHOLDER') settoggle('HELLO WORLD');
+		if (toggle === 'PLACEHOLDER') settoggle('HELLO WORLD');
 		else settoggle('PLACEHOLDER');
 	};
 
@@ -105,6 +107,7 @@ const PlaygroundView = () => {
 	const [textinputuser, setTextInputuser] = useState('PLACEHOLDER');
 	const [textinputpassword, setTextInputpassword] = useState('PLACEHOLDER');
 	const [response, setResponse] = useState('Not logged in');
+	const [nbAccounts, setNbAccounts] = useState(NaN);
 
 	const handleSignIn = () => {
 		console.log('test');
@@ -119,7 +122,15 @@ const PlaygroundView = () => {
 			});
 		console.log(response);
 	};
-	fetchData();
+
+	useEffect(() => {
+		fetchData().then((nbAccounts) => {
+			setNbAccounts(nbAccounts)
+		})
+	}, [])
+	if (Number.isNaN(nbAccounts)) {
+		return (<p>Loading...</p>)
+	}
 	return (
 		<Box bgImage="pictures/background.png" backgroundSize="cover" h="calc(100vh)">
 			<Center>
@@ -151,11 +162,11 @@ const PlaygroundView = () => {
 				<Text>{response}</Text>
 			</Center>
 			<div>
-      			<RectangleAG number={42} />
+      			<RectangleAG number={nbAccounts} />
     		</div>
 			<div style={{ margin: '25px' }} />
 			<div>
-				<BarChart lastWeekCount={31} thisWeekCount={42}></BarChart>
+				<BarChart lastWeekCount={10} thisWeekCount={nbAccounts}></BarChart>
 			</div>
     		<div style={{ margin: '25px' }} />
 			<div>
