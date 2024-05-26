@@ -86,10 +86,9 @@ const RectangleRG: React.FC<RectangleRecommendationGenerated> = ({ number, text 
 };
 
 const handleSaveDatas = async (nbAccounts: number, nbAccountsRealTime: number) => {
-  console.log('hello')
   let version = 'undefined'
 
-  const response = await fetch('http://localhost:8080/');
+  const response = await fetch(apiRootPath);
   if (response.ok) {
     const data = await response.json();
     version = data.tag
