@@ -1,9 +1,14 @@
-import { Text, Box, Center, Button } from '@chakra-ui/react';
+import { Box, Button, Center } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
+
+const apiRootPath = 'https://api.eip-getout.me'
+
+const nbAccountCreatedLastWeek = 10
+const nbRecomendationsGenerated = 476
 
 async function fetchData(): Promise<number> {
   try {
-    const response = await fetch('http://localhost:8080/accounts/1');
+    const response = await fetch(`${apiRootPath}/accounts/1`);
     const result = await response.json();
     console.log(result.accounts.accountCreatedLastWeek);
     return parseInt(result.accounts.accountCreatedLastWeek);
@@ -15,7 +20,7 @@ async function fetchData(): Promise<number> {
 
 async function fetchNbAccountsRealTime(): Promise<number> {
   try {
-    const response = await fetch('http://localhost:8080/sessions')
+    const response = await fetch(`${apiRootPath}/sessions`)
     const result = await response.json()
     // console.log(`result = ${JSON.stringify(result, null, 2)}`)
     return parseInt(result.nbSessions)
@@ -64,8 +69,8 @@ const BarChart: React.FC<BarChartProps> = ({ lastWeekCount, thisWeekCount }) => 
 
 const RectangleAG: React.FC<RectangleRecommendationGenerated> = ({ number, text }) => {
   return (
-    <div style={{ border: '1px solid black', marginLeft: '600px', marginRight: '600px', borderLeft: '1px solid black', borderRight: '1px solid black', padding: '1px', textAlign: 'center' }}>
-      <div style={{ marginBottom: '10px' }}>{text}</div>
+    <div style={{ border: '1px solid black', marginLeft: '30%', marginRight: '30%', borderLeft: '1px solid black', borderRight: '1px solid black', padding: '1px', textAlign: 'center' }}>
+      <div style={{ marginBottom: '1%' }}>{text}</div>
       <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{number}</div>
     </div>
   );
@@ -73,20 +78,47 @@ const RectangleAG: React.FC<RectangleRecommendationGenerated> = ({ number, text 
 
 const RectangleRG: React.FC<RectangleRecommendationGenerated> = ({ number, text }) => {
   return (
-    <div style={{ border: '1px solid black', marginLeft: '600px', marginRight: '600px', borderLeft: '1px solid black', borderRight: '1px solid black', padding: '1px', textAlign: 'center' }}>
-      <div style={{ marginBottom: '10px' }}>{text}</div>
+    <div style={{ border: '1px solid black', marginLeft: '30%', marginRight: '30%', borderLeft: '1px solid black', borderRight: '1px solid black', padding: '1px', textAlign: 'center' }}>
+      <div style={{ marginBottom: '1%' }}>{text}</div>
       <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{number}</div>
     </div>
   );
 };
 
-const PlaygroundView = () => {
-  const [toggle, settoggle] = useState('PLACEHOLDER');
+const handleSaveDatas = async (nbAccounts: number, nbAccountsRealTime: number) => {
+  console.log('hello')
+  let version = 'undefined'
 
-  const handleButton = () => {
-    if (toggle === 'PLACEHOLDER') settoggle('HELLO WORLD');
-    else settoggle('PLACEHOLDER');
+  const response = await fetch('http://localhost:8080/');
+  if (response.ok) {
+    const data = await response.json();
+    version = data.tag
+  }
+  const currentDate = new Date();
+  const fileContent = {
+    version,
+    accountCreatedThisWeek: nbAccounts,
+    nbAccountCreatedLastWeek,
+    nbAccountsRealTime,
+    nbRecomendationsGenerated
   };
+  const blob = new Blob([JSON.stringify(fileContent, null, 2)], { type: 'text/plain' });
+
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `Datas_${currentDate.toLocaleString()}`;
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  URL.revokeObjectURL(url);
+  document.body.removeChild(link);
+}
+
+const PlaygroundView = () => {
   const [nbAccounts, setNbAccounts] = useState<number | null>(null);
   const [nbAccountsRealTime, setNbAccountsRealTime] = useState<number | null>(null);
 
@@ -107,29 +139,28 @@ const PlaygroundView = () => {
   }
 
   return (
-    <Box bgImage="pictures/background.png" backgroundSize="cover" h="calc(100vh)">
-      {/* <Center>
-        <Text>Playground</Text>
-      </Center> */}
-      {/* <Button colorScheme="blue" size="lg" onClick={handleButton}>
-        Button
-      </Button> */}
+    <Box>
       <div>
         <RectangleAG number={nbAccountsRealTime} text="Nombre de comptes connectés" />
       </div>
-      <div style={{ margin: '25px' }} />
+      <div style={{ margin: '1%' }} />
 
       <div>
         <RectangleAG number={nbAccounts} text="Nombre de comptes créés cette semaine"/>
       </div>
-      <div style={{ margin: '25px' }} />
+      <div style={{ margin: '1%' }} />
       <div>
-        <BarChart lastWeekCount={10} thisWeekCount={nbAccounts}></BarChart>
+        <BarChart lastWeekCount={nbAccountCreatedLastWeek} thisWeekCount={nbAccounts}></BarChart>
       </div>
-      <div style={{ margin: '25px' }} />
+      <div style={{ margin: '1%' }} />
       <div>
-        <RectangleRG number={476} text="Nombre de recommendations générées" />
+        <RectangleRG number={nbRecomendationsGenerated} text="Nombre de recommendations générées" />
       </div>
+      <Center>
+        <Button marginTop={'10%'} backgroundColor={'#d85444'} colorScheme="red" size="lg" onClick={() => handleSaveDatas(nbAccounts, nbAccountsRealTime)}>
+          Sauvegarder les données
+        </Button>
+      </Center>
     </Box>
   );
 };

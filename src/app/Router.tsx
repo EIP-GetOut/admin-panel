@@ -1,10 +1,10 @@
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import HomeView from '../views/HomeView';
 import LoginView from '../views/LoginView';
-import PlaygroundView from '../views/PlaygroundView';
+import StatisticsView from '../views/Statistics';
 import ModerationView from '../views/ModerationView';
 import HistoryView from '../views/HistoryView';
-import UsersView from '../views/UsersView';
+import UserOverview from '../views/UsersOverview';
 
 
 const Router = () => (
@@ -12,10 +12,10 @@ const Router = () => (
 		<Routes>
 			<Route path="/" element={<HomeView />} />
 			<Route path="/login" element={<LoginView />} />
-			<Route path="/playground" element={<PlaygroundView />} />
+			<Route path='/user-overview' element={<UserOverview/>} />
+			<Route path="/statistics" element={<StatisticsView />} />
 			<Route path="/moderation" element={<ModerationView />} />
 			<Route path="/history" element={<HistoryView />} />
-			<Route path="/users" element={<UsersView />} />
 		</Routes>
 	</BrowserRouter>
 );
