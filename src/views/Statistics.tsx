@@ -1,7 +1,6 @@
 import { Box, Button, Center } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
-
-const apiRootPath = 'https://api.eip-getout.me'
+import { FC, useEffect, useState } from 'react';
+import { apiRootPath } from '../conf/backendStatus'
 
 const nbAccountCreatedLastWeek = 10
 const nbRecomendationsGenerated = 476
@@ -40,7 +39,7 @@ interface BarChartProps {
   thisWeekCount: number;
 }
 
-const BarChart: React.FC<BarChartProps> = ({ lastWeekCount, thisWeekCount }) => {
+const BarChart: FC<BarChartProps> = ({ lastWeekCount, thisWeekCount }) => {
   const maxCount = Math.max(lastWeekCount, thisWeekCount);
   const calculateHeight = (count: number): string => {
     const maxHeight = 200; // Hauteur maximale des barres
@@ -67,7 +66,7 @@ const BarChart: React.FC<BarChartProps> = ({ lastWeekCount, thisWeekCount }) => 
   );
 };
 
-const RectangleAG: React.FC<RectangleRecommendationGenerated> = ({ number, text }) => {
+const RectangleAG: FC<RectangleRecommendationGenerated> = ({ number, text }) => {
   return (
     <div style={{ border: '1px solid black', marginLeft: '30%', marginRight: '30%', borderLeft: '1px solid black', borderRight: '1px solid black', padding: '1px', textAlign: 'center' }}>
       <div style={{ marginBottom: '1%' }}>{text}</div>
@@ -76,7 +75,7 @@ const RectangleAG: React.FC<RectangleRecommendationGenerated> = ({ number, text 
   );
 };
 
-const RectangleRG: React.FC<RectangleRecommendationGenerated> = ({ number, text }) => {
+const RectangleRG: FC<RectangleRecommendationGenerated> = ({ number, text }) => {
   return (
     <div style={{ border: '1px solid black', marginLeft: '30%', marginRight: '30%', borderLeft: '1px solid black', borderRight: '1px solid black', padding: '1px', textAlign: 'center' }}>
       <div style={{ marginBottom: '1%' }}>{text}</div>
@@ -140,12 +139,12 @@ const PlaygroundView = () => {
   return (
     <Box>
       <div>
-        <RectangleAG number={nbAccountsRealTime} text="Nombre de comptes connectés" />
+        <RectangleAG number={nbAccountsRealTime} text={'Nombre de comptes connectés'} />
       </div>
       <div style={{ margin: '1%' }} />
 
       <div>
-        <RectangleAG number={nbAccounts} text="Nombre de comptes créés cette semaine"/>
+        <RectangleAG number={nbAccounts} text={'Nombre de comptes créés cette semaine'}/>
       </div>
       <div style={{ margin: '1%' }} />
       <div>
@@ -153,10 +152,10 @@ const PlaygroundView = () => {
       </div>
       <div style={{ margin: '1%' }} />
       <div>
-        <RectangleRG number={nbRecomendationsGenerated} text="Nombre de recommendations générées" />
+        <RectangleRG number={nbRecomendationsGenerated} text={'Nombre de recommendations générées'} />
       </div>
       <Center>
-        <Button marginTop={'10%'} backgroundColor={'#d85444'} colorScheme="red" size="lg" onClick={() => handleSaveDatas(nbAccounts, nbAccountsRealTime)}>
+        <Button marginTop={'10%'} backgroundColor={'#d85444'} colorScheme={'red'} size={'lg'} onClick={() => handleSaveDatas(nbAccounts, nbAccountsRealTime)}>
           Sauvegarder les données
         </Button>
       </Center>
