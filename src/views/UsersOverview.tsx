@@ -2,7 +2,7 @@ import { Box } from '@chakra-ui/react';
 import React, { useState, useEffect, CSSProperties } from 'react';
 import SignUpForm from './SignupForm';
 
-const apiRootPath = 'https://api.eip-getout.me'
+import { apiRootPath } from '../conf/backendStatus'
 
 
 type User = {
