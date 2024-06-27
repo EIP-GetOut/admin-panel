@@ -1,8 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
-
-const apiRootPath = 'https://api.eip-getout.me'
+import { apiRootPath } from '../conf/backendStatus';
 
 interface SignUpFormProps {
   closeModal: () => void;
