@@ -1,7 +1,9 @@
 import { Box } from '@chakra-ui/react';
 import React, { useState, useEffect, CSSProperties } from 'react';
+import SignUpForm from './SignupForm';
 
 const apiRootPath = 'https://api.eip-getout.me'
+
 
 type User = {
   id: string;
@@ -17,7 +19,6 @@ type ApiResponse = {
       email: string;
       firstName: string;
       lastName: string;
-      // other fields are omitted
     }[];
     accountCreatedLastWeek: number;
   };
@@ -36,8 +37,16 @@ const UserTable: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [page, setPage] = useState<number>(1);
   const [isLastPage, setIsLastPage] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState(false);
 
-  // Function to fetch users from backend
+  const openModal = () => {
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   const fetchUsers = async (page: number): Promise<void> => {
     try {
       const response = await fetch(`${apiRootPath}/accounts/${page}`);
@@ -61,7 +70,6 @@ const UserTable: React.FC = () => {
     }
   };
 
-  // Function to delete a user
   const handleDelete = async (userId: string): Promise<void> => {
     try {
       const response = await fetch(`${apiRootPath}/accounts/${userId}`, {
@@ -70,14 +78,12 @@ const UserTable: React.FC = () => {
       if (!response.ok) {
         throw new Error('Failed to delete user');
       }
-      // Refetch users after deletion
       fetchUsers(page);
     } catch (error) {
       console.error('Error deleting user:', error);
     }
   };
 
-  // Fetch users when the component mounts and when the page changes
   useEffect(() => {
     fetchUsers(page);
   }, [page]);
@@ -181,6 +187,63 @@ const UserTable: React.FC = () => {
           Next
         </button>
       </div>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <button
+        style={{
+          padding: '10px 20px',
+          fontSize: '16px',
+          backgroundColor: '#007bff',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer'
+        }}
+        onClick={openModal}
+      >
+        Créer un compte
+      </button>
+      {showModal && (
+        <div
+          style={{
+            position: 'fixed',
+            top: '0',
+            left: '0',
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: '#fff',
+              padding: '20px',
+              borderRadius: '8px',
+              maxWidth: '400px',
+              width: '100%'
+            }}
+          >
+            <span
+              style={{
+                position: 'absolute',
+                top: '10px',
+                right: '10px',
+                fontSize: '80px',
+                cursor: 'pointer'
+              }}
+              onClick={closeModal}
+            >
+              &times;
+            </span>
+            <h2>Créer un compte</h2>
+            <SignUpForm closeModal={closeModal} />
+          </div>
+        </div>
+      )}
+    </div>
+
     </div>
   );
 };
