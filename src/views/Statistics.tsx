@@ -42,9 +42,9 @@ interface BarChartProps {
 const BarChart: FC<BarChartProps> = ({ lastWeekCount, thisWeekCount }) => {
   const maxCount = Math.max(lastWeekCount, thisWeekCount);
   const calculateHeight = (count: number): string => {
-    const maxHeight = 200; // Hauteur maximale des barres
-    const ratio = (count / maxCount) * 100; // Calculer le ratio en pourcentage
-    const height = (ratio / 100) * maxHeight; // Calculer la hauteur en pixels
+    const maxHeight = 200;
+    const ratio = (count / maxCount) * 100;
+    const height = (ratio / 100) * maxHeight;
     return `${height}px`;
   };
 

@@ -19,10 +19,9 @@ const LoginView = () => {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent the default form submission
-    // Add your custom logic here
+    e.preventDefault();
     handleModeration();
-    alert('Form submitted!'); // Example alert
+    alert('Form submitted!');
   };
 
   return (

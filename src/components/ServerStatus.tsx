@@ -17,7 +17,7 @@ const BackendStatus: React.FC<Props> = ({backendStatus}) => {
                 backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.5), transparent 70%)',
                 backgroundColor: backendStatus.status === 'Running' ? 'green' : 'red',
                 marginRight: '10px',
-                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.5)', // Shadow below the circle
+                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.5)',
             }}
           />
           <span style={{
