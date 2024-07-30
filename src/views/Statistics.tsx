@@ -2,9 +2,6 @@ import { Box, Button, Center } from '@chakra-ui/react';
 import { FC, useEffect, useState } from 'react';
 import { apiRootPath } from '../conf/backendStatus'
 
-const nbAccountCreatedLastWeek = 10
-const nbRecomendationsGenerated = 476
-
 async function fetchData(): Promise<number> {
   try {
     const response = await fetch(`${apiRootPath}/accounts/1`);
@@ -21,8 +18,31 @@ async function fetchNbAccountsRealTime(): Promise<number> {
   try {
     const response = await fetch(`${apiRootPath}/sessions`)
     const result = await response.json()
-    // console.log(`result = ${JSON.stringify(result, null, 2)}`)
+    console.log(result)
     return parseInt(result.nbSessions)
+  } catch (error) {
+    console.error('oops')
+  }
+  return 0;
+}
+async function fetchNbAccountCreatedWeekBefore(): Promise<number> {
+  try {
+    const response = await fetch(`${apiRootPath}/stats/account`);
+    const result = await response.json();
+    console.log(result);
+    return parseInt(result);
+  } catch (error) {
+    console.error('Erreur lors de la requête :', error);
+  }
+  return 0;
+}
+
+async function fetchnbRecomendationsGenerated(): Promise<number> {
+  try {
+    const response = await fetch(`${apiRootPath}/stats/recommendations`)
+    const result = await response.json()
+    console.log(`result=${result}`)
+    return parseInt(result)
   } catch (error) {
     console.error('oops')
   }
@@ -84,7 +104,7 @@ const RectangleRG: FC<RectangleRecommendationGenerated> = ({ number, text }) => 
   );
 };
 
-const handleSaveDatas = async (nbAccounts: number, nbAccountsRealTime: number) => {
+const handleSaveDatas = async (nbAccounts: number, nbAccountsRealTime: number, nbAccountCreatedWeekBefore: number, nbRecomendationsGenerated : number,) => {
   let version = 'undefined'
 
   const response = await fetch(apiRootPath);
@@ -96,7 +116,7 @@ const handleSaveDatas = async (nbAccounts: number, nbAccountsRealTime: number) =
   const fileContent = {
     version,
     accountCreatedThisWeek: nbAccounts,
-    nbAccountCreatedLastWeek,
+    nbAccountCreatedWeekBefore,
     nbAccountsRealTime,
     nbRecomendationsGenerated
   };
@@ -119,6 +139,9 @@ const handleSaveDatas = async (nbAccounts: number, nbAccountsRealTime: number) =
 const PlaygroundView = () => {
   const [nbAccounts, setNbAccounts] = useState<number | null>(null);
   const [nbAccountsRealTime, setNbAccountsRealTime] = useState<number | null>(null);
+  const [nbAccountsCreatedWeekBefore, setNbAccountCreatedWeekBefore] = useState<number | null>(null);
+  const [nbRecomendationsGenerated, setNbRecomendationGeberated] = useState<number | null>(null);
+
 
   useEffect(() => {
     fetchData().then((nbAccounts) => {
@@ -126,13 +149,25 @@ const PlaygroundView = () => {
     });
     fetchNbAccountsRealTime().then((nbAccountsRealTime) => {
       setNbAccountsRealTime(nbAccountsRealTime);
-    })
+    });
+    fetchNbAccountCreatedWeekBefore().then((nbAccountCreatedWeekBefore) => {
+      setNbAccountCreatedWeekBefore(nbAccountCreatedWeekBefore)
+    });
+    fetchnbRecomendationsGenerated().then((nbRecomendationsGenerated) => {
+      setNbRecomendationGeberated(nbRecomendationsGenerated)
+    });
   }, []);
 
   if (nbAccounts === null) {
     return (<p>Loading...</p>);
   }
   if (nbAccountsRealTime === null ) {
+    return (<p>Loading...</p>);
+  }
+  if (nbAccountsCreatedWeekBefore === null) {
+    return (<p>Loading...</p>);
+  }
+  if (nbRecomendationsGenerated === null ) {
     return (<p>Loading...</p>);
   }
 
@@ -148,14 +183,14 @@ const PlaygroundView = () => {
       </div>
       <div style={{ margin: '1%' }} />
       <div>
-        <BarChart lastWeekCount={nbAccountCreatedLastWeek} thisWeekCount={nbAccounts}></BarChart>
+        <BarChart lastWeekCount={nbAccountsCreatedWeekBefore} thisWeekCount={nbAccounts}></BarChart>
       </div>
       <div style={{ margin: '1%' }} />
       <div>
         <RectangleRG number={nbRecomendationsGenerated} text={'Nombre de recommendations générées'} />
       </div>
       <Center>
-        <Button marginTop={'10%'} backgroundColor={'#d85444'} colorScheme={'red'} size={'lg'} onClick={() => handleSaveDatas(nbAccounts, nbAccountsRealTime)}>
+        <Button marginTop={'10%'} backgroundColor={'#d85444'} colorScheme={'red'} size={'lg'} onClick={() => handleSaveDatas(nbAccounts, nbAccountsRealTime, nbAccountsCreatedWeekBefore, nbRecomendationsGenerated)}>
           Sauvegarder les données
         </Button>
       </Center>
