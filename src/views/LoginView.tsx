@@ -1,84 +1,37 @@
-import {
-  Flex,
-  Image,
-  Box,
-  Center,
-  Button,
-  Text,
-  Container,
-  FormControl,
-  FormLabel,
-  Input,
-} from '@chakra-ui/react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { apiRootPath } from '../conf/backendStatus'
 
-const LoginView = () => {
+
+const LoginPage: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const handleModeration = () => {
-    navigate('/moderation');
-  };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    handleModeration();
-    alert('Form submitted!');
+    try {
+      const response = await axios.post(`${apiRootPath}/account/login`, { email, password });
+      if (response.data.success) {
+        navigate('/homeview');
+      } else {
+        alert('Login failed');
+      }
+    } catch (error) {
+      alert('An error occurred. Please try again.');
+    }
   };
 
   return (
-    <Flex>
-      {/* Left Half */}
-      <Box
-        flex={1}
-        bgImage={'pictures/background.png'}
-        backgroundSize={'cover'}
-        w={'100%'}
-        h={'100vh'}
-        objectFit={'cover'}
-      >
-        <Center>
-          <Image
-            marginTop={624}
-            height={'calc(10vh)'}
-            src={'pictures/getOutBackOfficeLogo.png'}
-          />
-        </Center>
-      </Box>
-
-      {/* Right Half */}
-      <Box flex={1} bg={'white'} h={'100vh'}>
-        <Center h={'45vh'}>
-          <Text fontSize={'3xl'} as={'u'}>
-            LOG IN
-          </Text>
-        </Center>
-        <Container maxW={'container.md'}>
-          <form onSubmit={handleSubmit}>
-            <FormControl>
-              <FormLabel htmlFor={'mail'}>ADRESSE MAIL</FormLabel>
-              <Input
-                type={'text'}
-                id={'name'}
-                placeholder={'Entrez votre adresse mail'}
-                mb={4}
-              />
-              <FormLabel htmlFor={'email'}>MOT DE PASSE</FormLabel>
-              <Input
-                type={'email'}
-                id={'email'}
-                placeholder={'Entrez votre mot de passe'}
-                mb={4}
-              />
-              <Center>
-                <Button colorScheme={'blue'} type={'submit'}>
-                  Submit
-                </Button>
-              </Center>
-            </FormControl>
-          </form>
-        </Container>
-      </Box>
-    </Flex>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', width: '300px' }}>
+        <input type='email' placeholder={'Adresse email'} value={email} onChange={(e) => setEmail(e.target.value)} required style={{ marginBottom: '10px', padding: '10px', fontSize: '16px' }} />
+        <input type='password' placeholder={'Mot de passe'} value={password} onChange={(e) => setPassword(e.target.value)} required style={{ marginBottom: '10px', padding: '10px', fontSize: '16px' }} />
+        <button type='submit' style={{ padding: '10px', fontSize: '16px' }}>{'Se connecter'}</button>
+      </form>
+    </div>
   );
 };
 
-export default LoginView;
+export default LoginPage;

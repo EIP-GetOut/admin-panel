@@ -41,10 +41,11 @@ const Router = () => {
     <Routes>
       <Route path={'/'} element={<HomeView backendStatus={backendStatus}/>} />
       {backendStatus && <Route path={'/login'} element={<LoginView />} />}
-      {backendStatus && <Route path={'/user-overview'} element={<UserOverview/>} />}
+      {backendStatus && <Route path={'/user-overview'} element={<UserOverview />} />}
       {backendStatus && <Route path={'/statistics'} element={<StatisticsView />} />}
       {backendStatus && <Route path={'/moderation'} element={<ModerationView />} />}
       {backendStatus && <Route path={'/history'} element={<HistoryView />} />}
+      {backendStatus && <Route path={'/home'} element={<HomeView backendStatus={backendStatus}/>} />}
     </Routes>
   </BrowserRouter>
 	);
