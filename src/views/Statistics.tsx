@@ -6,7 +6,6 @@ async function fetchData(): Promise<number> {
   try {
     const response = await fetch(`${apiRootPath}/accounts/1`);
     const result = await response.json();
-    console.log(result.accounts.accountCreatedLastWeek);
     return parseInt(result.accounts.accountCreatedLastWeek);
   } catch (error) {
     console.error('Erreur lors de la requête :', error);
@@ -18,7 +17,6 @@ async function fetchNbAccountsRealTime(): Promise<number> {
   try {
     const response = await fetch(`${apiRootPath}/sessions`)
     const result = await response.json()
-    console.log(result)
     return parseInt(result.nbSessions)
   } catch (error) {
     console.error('oops')
@@ -27,10 +25,9 @@ async function fetchNbAccountsRealTime(): Promise<number> {
 }
 async function fetchNbAccountCreatedWeekBefore(): Promise<number> {
   try {
-    const response = await fetch(`${apiRootPath}/stats/account`);
+    const response = await fetch(`${apiRootPath}/stats/accounts`);
     const result = await response.json();
-    console.log(result);
-    return parseInt(result);
+    return parseInt(result.numberOfAccounts);
   } catch (error) {
     console.error('Erreur lors de la requête :', error);
   }
@@ -41,8 +38,7 @@ async function fetchnbRecomendationsGenerated(): Promise<number> {
   try {
     const response = await fetch(`${apiRootPath}/stats/recommendations`)
     const result = await response.json()
-    console.log(`result=${result}`)
-    return parseInt(result)
+    return parseInt(result.numberOfRecommendations)
   } catch (error) {
     console.error('oops')
   }
