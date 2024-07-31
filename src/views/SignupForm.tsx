@@ -12,6 +12,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ closeModal }) => {
 
   const onSubmit = async (data: any) => {
     try {
+      data.isForBeta = true;
       const response = await axios.post(`${apiRootPath}/account/signup`, data);
       console.log('Réponse du serveur:', response.data);
       reset();
@@ -29,7 +30,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ closeModal }) => {
       <div style={{ marginBottom: '15px' }}>
         <label style={{ fontWeight: 'bold' }}>Email</label>
         <input
-          type="email"
+          type={'email'}
           {...register('email', {
             required: 'Email est requis',
             pattern: {
@@ -49,7 +50,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ closeModal }) => {
       <div style={{ marginBottom: '15px' }}>
         <label style={{ fontWeight: 'bold' }}>Prénom</label>
         <input
-          type="text"
+          type={'text'}
           {...register('firstName', { required: 'Prénom est requis' })}
           style={{
             padding: '8px',
@@ -63,7 +64,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ closeModal }) => {
       <div style={{ marginBottom: '15px' }}>
         <label style={{ fontWeight: 'bold' }}>Nom</label>
         <input
-          type="text"
+          type={'text'}
           {...register('lastName', { required: 'Nom est requis' })}
           style={{
             padding: '8px',
@@ -77,7 +78,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ closeModal }) => {
       <div style={{ marginBottom: '15px' }}>
         <label style={{ fontWeight: 'bold' }}>Date de Naissance (DD/MM/YYYY)</label>
         <input
-          type="text"
+          type={'text'}
           {...register('bornDate', {
             required: 'Date de naissance est requise',
             pattern: {
@@ -97,7 +98,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ closeModal }) => {
       <div style={{ marginBottom: '15px' }}>
         <label style={{ fontWeight: 'bold' }}>Mot de Passe</label>
         <input
-          type="password"
+          type={'password'}
           {...register('password', { required: 'Mot de passe est requis' })}
           style={{
             padding: '8px',
@@ -109,7 +110,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ closeModal }) => {
       </div>
 
       <button
-        type="submit"
+        type={'submit'}
         style={{
           padding: '10px 20px',
           fontSize: '16px',
@@ -121,7 +122,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ closeModal }) => {
           marginTop: '10px'
         }}
       >
-        S'inscrire
+        S&apos;inscrire
       </button>
     </form>
   );
