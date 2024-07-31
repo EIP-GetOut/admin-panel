@@ -39,7 +39,7 @@ const Router = () => {
 	return (
   <BrowserRouter>
     <Routes>
-      <Route path={'/'} element={<HomeView backendStatus={backendStatus}/>} />
+      <Route path={'/'} element={<LoginView/>} />
       {backendStatus && <Route path={'/login'} element={<LoginView />} />}
       {backendStatus && <Route path={'/user-overview'} element={<UserOverview />} />}
       {backendStatus && <Route path={'/statistics'} element={<StatisticsView />} />}
