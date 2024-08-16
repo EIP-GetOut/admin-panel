@@ -197,24 +197,24 @@ const UserTable: React.FC = () => {
                 <>
                   <td style={thTdStyle}>
                     <input
-                      type="text"
-                      name="firstName"
+                      type={'text'}
+                      name={'firstName'}
                       value={editUser?.firstName}
                       onChange={handleInputChange}
                     />
                   </td>
                   <td style={thTdStyle}>
                     <input
-                      type="text"
-                      name="lastName"
+                      type={'text'}
+                      name={'lastName'}
                       value={editUser?.lastName}
                       onChange={handleInputChange}
                     />
                   </td>
                   <td style={thTdStyle}>
                     <input
-                      type="email"
-                      name="email"
+                      type={'email'}
+                      name={'email'}
                       value={editUser?.email}
                       onChange={handleInputChange}
                     />
@@ -250,7 +250,7 @@ const UserTable: React.FC = () => {
                     </button>
                     <EditIcon
                       style={{ marginLeft: '10px', cursor: 'pointer' }}
-                      color="black"
+                      color={'black'}
                       onClick={() => handleEdit(user)}
                     />
                   </td>

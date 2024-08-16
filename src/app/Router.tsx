@@ -16,7 +16,7 @@ const Router = () => {
   useEffect(() => {
     const fetchBackendStatus = async () => {
       try {
-        const response = await fetch(apiRootPath);
+        const response = await fetch(apiRootPath, {cache: 'no-store'});
         if (response.ok) {
           const data = await response.json();
           setBackendStatus({ status: 'Running', version: data.tag });

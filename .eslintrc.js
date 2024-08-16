@@ -25,11 +25,13 @@ module.exports = {
         '@typescript-eslint'
     ],
     rules: {
-        'no-unused-vars': ['warn', { vars: 'all', args: 'none', ignoreRestSiblings: false }],
+        '@typescript-eslint/no-unused-vars': ['off', { vars: 'all', args: 'none', ignoreRestSiblings: false }],
         'no-restricted-imports': [
             'error',
             { patterns: ['@mui/*/*/*', '!@mui/material/test-utils/*'] }
         ],
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-non-null-assertion': 'off',
         'react/jsx-uses-react': 'off',
         'react/react-in-jsx-scope': 'off',
         quotes: [2, 'single', { avoidEscape: true }],
