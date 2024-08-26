@@ -29,6 +29,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ closeModal }) => {
     >
       <div style={{ marginBottom: '15px' }}>
         <label style={{ fontWeight: 'bold' }}>Email</label>
+        <br />
         <input
           type={'email'}
           {...register('email', {
@@ -49,6 +50,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ closeModal }) => {
 
       <div style={{ marginBottom: '15px' }}>
         <label style={{ fontWeight: 'bold' }}>Prénom</label>
+        <br />
         <input
           type={'text'}
           {...register('firstName', { required: 'Prénom est requis' })}
@@ -63,6 +65,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ closeModal }) => {
 
       <div style={{ marginBottom: '15px' }}>
         <label style={{ fontWeight: 'bold' }}>Nom</label>
+        <br />
         <input
           type={'text'}
           {...register('lastName', { required: 'Nom est requis' })}
@@ -77,6 +80,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ closeModal }) => {
 
       <div style={{ marginBottom: '15px' }}>
         <label style={{ fontWeight: 'bold' }}>Date de Naissance (DD/MM/YYYY)</label>
+        <br />
         <input
           type={'text'}
           {...register('bornDate', {
@@ -97,8 +101,9 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ closeModal }) => {
 
       <div style={{ marginBottom: '15px' }}>
         <label style={{ fontWeight: 'bold' }}>Mot de Passe</label>
+        <br />
         <input
-          type={'password'}
+          type={'text'}
           {...register('password', { required: 'Mot de passe est requis' })}
           style={{
             padding: '8px',

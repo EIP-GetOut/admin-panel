@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { apiRootPath } from '../conf/backendStatus'
+import { setConnected } from '../app/Router';
 
 
 async function checkPermission(): Promise<boolean> {
@@ -23,6 +24,7 @@ const LoginPage: React.FC = () => {
       console.log(`res=${JSON.stringify(response.data, null, 2)}, status = ${response.status} type = ${typeof response.status}`)
       if (response.status === 200 ) {
         if (await checkPermission()) {
+          setConnected(true);
           navigate('/home')
         } else {
           alert('Login failed');
@@ -38,9 +40,9 @@ const LoginPage: React.FC = () => {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
       <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', width: '300px' }}>
-        <input type={'email'} placeholder={'Adresse email'} value={email} onChange={(e) => setEmail(e.target.value)} required style={{ marginBottom: '10px', padding: '10px', fontSize: '16px' }} />
-        <input type={'password'} placeholder={'Mot de passe'} value={password} onChange={(e) => setPassword(e.target.value)} required style={{ marginBottom: '10px', padding: '10px', fontSize: '16px' }} />
-        <button type={'submit'} style={{ padding: '10px', fontSize: '16px' }}>Se connecter</button>
+        <input type={'email'} placeholder={'Adresse email'} value={email} onChange={(e) => setEmail(e.target.value)} required style={{ marginBottom: '10px', padding: '10px', fontSize: '16px', border: '2px solid black' }} />
+        <input type={'password'} placeholder={'Mot de passe'} value={password} onChange={(e) => setPassword(e.target.value)} required style={{ marginBottom: '10px', padding: '10px', fontSize: '16px', border: '2px solid black' }} />
+        <button type={'submit'} style={{ padding: '10px', fontSize: '16px', border: '2px solid black' }}>Se connecter</button>
       </form>
     </div>
   );

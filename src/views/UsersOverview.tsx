@@ -327,7 +327,7 @@ const UserTable: React.FC = () => {
               >
                 &times;
               </span>
-              <h2>Créer un compte</h2>
+              <h2>Créer un compte pour la bêta</h2>
               <SignUpForm closeModal={closeModal} />
             </div>
           </div>

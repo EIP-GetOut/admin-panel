@@ -1,4 +1,4 @@
-import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom';
 import HomeView from '../views/HomeView';
 import LoginView from '../views/LoginView';
 import StatisticsView from '../views/Statistics';
@@ -8,6 +8,11 @@ import UserOverview from '../views/UsersOverview';
 import { useEffect, useState } from 'react'
 import { BackendStatusInterface, apiRootPath } from '../conf/backendStatus'
 
+export let isConnected = false;
+
+export const setConnected = (status: boolean) => {
+  isConnected = status;
+};
 
 
 const Router = () => {
@@ -41,13 +46,14 @@ const Router = () => {
     <Routes>
       <Route path={'/'} element={<LoginView/>} />
       {backendStatus && <Route path={'/login'} element={<LoginView />} />}
-      {backendStatus && <Route path={'/user-overview'} element={<UserOverview />} />}
-      {backendStatus && <Route path={'/statistics'} element={<StatisticsView />} />}
-      {backendStatus && <Route path={'/moderation'} element={<ModerationView />} />}
-      {backendStatus && <Route path={'/history'} element={<HistoryView />} />}
-      {backendStatus && <Route path={'/home'} element={<HomeView backendStatus={backendStatus}/>} />}
+      {backendStatus && <Route path={'/user-overview'} element={isConnected ? <UserOverview /> : <Navigate to={'/login'}/>} />}
+      {backendStatus && <Route path={'/statistics'} element={isConnected ? <StatisticsView /> : <Navigate to={'/login'}/>} />}
+      {backendStatus && <Route path={'/moderation'} element={isConnected ? <ModerationView /> : <Navigate to={'/login'}/>} />}
+      {backendStatus && <Route path={'/history'} element={isConnected ? <HistoryView /> : <Navigate to={'/login'}/>} />}
+      {backendStatus && <Route path={'/home'} element={isConnected ? <HomeView backendStatus={backendStatus}/> : <Navigate to={'/login'}/>} />}
     </Routes>
   </BrowserRouter>
 	);
 }
+
 export default Router;
