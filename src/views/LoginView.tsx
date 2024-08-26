@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { apiRootPath } from '../conf/backendStatus'
-import { setConnected } from '../app/Router';
+// import { setConnected } from '../app/Router';
 
 
 async function checkPermission(): Promise<boolean> {
@@ -24,7 +24,7 @@ const LoginPage: React.FC = () => {
       console.log(`res=${JSON.stringify(response.data, null, 2)}, status = ${response.status} type = ${typeof response.status}`)
       if (response.status === 200 ) {
         if (await checkPermission()) {
-          setConnected(true);
+          // setConnected(true);
           navigate('/home')
         } else {
           alert('Login failed');
