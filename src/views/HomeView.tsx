@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import BackendStatus from '../components/ServerStatus';
 import { BackendStatusInterface } from '../conf/backendStatus'
 import { CSSProperties, FC } from 'react'
+import handleNews from './NewsView';
 
 const paginationButtonDisabledStyle: CSSProperties = {
   padding: '10px 20px',
@@ -57,6 +58,16 @@ const HomeView: FC<Props> = ({backendStatus}) => {
           </Button>
         )
         : <button style={paginationButtonDisabledStyle}>Gestion des utilisateurs</button>
+      }
+    </Center>
+    <Center marginTop={'1%'}>
+      {backIsUp ?
+      (
+        <Button backgroundColor={'#d85444'} colorScheme={'red'} size={'lg'} onClick={handleNews}>
+          Gestion des articles
+        </Button>
+      )
+        : <button style={paginationButtonDisabledStyle}>Gestion des articles</button>
       }
     </Center>
   </Box>

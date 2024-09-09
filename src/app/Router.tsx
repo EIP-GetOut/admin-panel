@@ -5,6 +5,7 @@ import StatisticsView from '../views/Statistics';
 import ModerationView from '../views/ModerationView';
 import HistoryView from '../views/HistoryView';
 import UserOverview from '../views/UsersOverview';
+import NewsView from '../views/NewsView';
 import { useEffect, useState } from 'react'
 import { BackendStatusInterface, apiRootPath } from '../conf/backendStatus'
 // import { isConnected } from './Auth';
@@ -44,6 +45,7 @@ const Router = () => {
       {backendStatus && <Route path={'/statistics'} element={<StatisticsView />} />}
       {backendStatus && <Route path={'/moderation'} element={<ModerationView />} />}
       {backendStatus && <Route path={'/history'} element={<HistoryView />} />}
+      {backendStatus && <Route path={'/news'} element={<NewsView />} />}
       {backendStatus && <Route path={'/home'} element={<HomeView backendStatus={backendStatus}/>} />}
       {/* {backendStatus && <Route path={'/user-overview'} element={isConnected ? <UserOverview /> : <Navigate to={'/login'}/>} />}
       {backendStatus && <Route path={'/statistics'} element={isConnected ? <StatisticsView /> : <Navigate to={'/login'}/>} />}
