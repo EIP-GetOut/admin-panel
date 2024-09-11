@@ -16,8 +16,5 @@ RUN npm install react-scripts@5.0.1 -g
 # add app
 COPY . ./
 
-# expose port 8081
-EXPOSE 8081
-
 # start app
 CMD ["npm", "start"]
