@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import BackendStatus from '../components/ServerStatus';
 import { BackendStatusInterface } from '../conf/backendStatus'
 import { CSSProperties, FC } from 'react'
-import handleNews from './NewsView';
 
 const paginationButtonDisabledStyle: CSSProperties = {
   padding: '10px 20px',
@@ -29,6 +28,9 @@ const HomeView: FC<Props> = ({backendStatus}) => {
 	const handleUserOverview = () => {
 		navigate('/user-overview');
 	};
+  const handleNews = () => {
+    navigate('/news')
+  }
 
 	return (
   <Box backgroundSize={'cover'} h={'calc(100vh)'}>
