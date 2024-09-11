@@ -5,7 +5,7 @@
 ** Wrote by Alexandre Chetrit <chetrit.pro@hotmail.com>
 */
 
-export const apiRootPath = 'https://api.eip-getout.me'
+export const apiRootPath = 'https://api.eipgetout.live'
 
 export interface BackendStatusInterface {
   status: 'Running' | 'Down';
