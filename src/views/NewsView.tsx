@@ -110,34 +110,62 @@ const HandleNews: React.FC = () => {
       </div>
 
       {showAddPopup && (
-        <div style={{ marginTop: '20px' }}>
+        <div style={{ marginTop: '20px', border: '2px solid #007bff', padding: '20px', borderRadius: '8px' }}>
           <input
             type={'text'}
             placeholder={'Titre'}
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
-            style={{ display: 'block', marginBottom: '10px', width: '100%' }}
+            style={{
+              display: 'block',
+              marginBottom: '10px',
+              width: '100%',
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+              padding: '10px',
+            }}
           />
           <input
             type={'text'}
             placeholder={"URL de l'image"}
             value={newImage}
             onChange={(e) => setNewImage(e.target.value)}
-            style={{ display: 'block', marginBottom: '10px', width: '100%' }}
+            style={{
+              display: 'block',
+              marginBottom: '10px',
+              width: '100%',
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+              padding: '10px',
+            }}
           />
           <input
             type={'text'}
             placeholder={"URL de l'article"}
             value={newArticleUrl}
             onChange={(e) => setNewArticleUrl(e.target.value)}
-            style={{ display: 'block', marginBottom: '10px', width: '100%' }}
+            style={{
+              display: 'block',
+              marginBottom: '10px',
+              width: '100%',
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+              padding: '10px',
+            }}
           />
           <input
             type={'text'}
             placeholder={'URL du logo'}
             value={newLogoUrl}
             onChange={(e) => setNewLogoUrl(e.target.value)}
-            style={{ display: 'block', marginBottom: '10px', width: '100%' }}
+            style={{
+              display: 'block',
+              marginBottom: '10px',
+              width: '100%',
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+              padding: '10px',
+            }}
           />
           <button onClick={saveArticle} style={{ marginRight: '10px' }}>
             {editMode ? 'Modifier' : 'Ajouter'}
