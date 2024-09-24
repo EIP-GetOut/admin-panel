@@ -8,50 +8,50 @@ import UserOverview from '../views/UsersOverview';
 import NewsView from '../views/NewsView';
 import { useEffect, useState } from 'react'
 import { BackendStatusInterface, apiRootPath } from '../conf/backendStatus'
-// import { isConnected } from './Auth';
+import useCurrentAccount from '../services/CurrentAccountContext'
+import LoadingPage from '../components/LoadingPage'
 
 const Router = () => {
 	const [backendStatus, setBackendStatus] = useState<BackendStatusInterface | null>(null);
+  const { currentAccount, setCurrentAccount } = useCurrentAccount()
+  const isConnected = false
 
   useEffect(() => {
+    let isSubscribed = true
     const fetchBackendStatus = async () => {
       try {
         const response = await fetch(apiRootPath, {cache: 'no-store'});
         if (response.ok) {
           const data = await response.json();
-          setBackendStatus({ status: 'Running', version: data.tag });
+          isSubscribed && setBackendStatus({ status: 'Running', version: data.tag });
         } else {
-          setBackendStatus({ status: 'Down' });
+          isSubscribed && setBackendStatus({ status: 'Down' });
         }
       } catch (error) {
         console.error('Error fetching backend status:', error);
-        setBackendStatus({ status: 'Down' });
+        isSubscribed &&  setBackendStatus({ status: 'Down' });
       }
     };
 
-    fetchBackendStatus();
-  }, []);
+    isSubscribed && setBackendStatus({ status: 'Running', version: 'v0.6.5' });
 
-	if (backendStatus == null) {
-		return <></>
+    return () => {isSubscribed = false}
+  }, [])
+
+	if (backendStatus === null) {
+		return <LoadingPage/>
 	}
 
 	return (
   <BrowserRouter>
     <Routes>
-      <Route path={'/'} element={<LoginView/>} />
-      {backendStatus && <Route path={'/login'} element={<LoginView />} />}
-      {backendStatus && <Route path={'/user-overview'} element={<UserOverview />} />}
-      {backendStatus && <Route path={'/statistics'} element={<StatisticsView />} />}
-      {backendStatus && <Route path={'/moderation'} element={<ModerationView />} />}
-      {backendStatus && <Route path={'/history'} element={<HistoryView />} />}
-      {backendStatus && <Route path={'/news'} element={<NewsView />} />}
-      {backendStatus && <Route path={'/home'} element={<HomeView backendStatus={backendStatus}/>} />}
-      {/* {backendStatus && <Route path={'/user-overview'} element={isConnected ? <UserOverview /> : <Navigate to={'/login'}/>} />}
-      {backendStatus && <Route path={'/statistics'} element={isConnected ? <StatisticsView /> : <Navigate to={'/login'}/>} />}
-      {backendStatus && <Route path={'/moderation'} element={isConnected ? <ModerationView /> : <Navigate to={'/login'}/>} />}
-      {backendStatus && <Route path={'/history'} element={isConnected ? <HistoryView /> : <Navigate to={'/login'}/>} />}
-      {backendStatus && <Route path={'/home'} element={isConnected ? <HomeView backendStatus={backendStatus}/> : <Navigate to={'/login'}/>} />} */}
+      <Route path={'/'} element={<HomeView backendStatus={backendStatus}/>} />
+      <Route path={'/login'} element={<LoginView/>} />
+      <Route path={'/user-overview'} element={<UserOverview/>} />
+      <Route path={'/statistics'} element={<StatisticsView/>} />
+      <Route path={'/moderation'} element={<ModerationView/>} />
+      <Route path={'/history'} element={<HistoryView />} />
+      <Route path={'/news'} element={<NewsView />} />
     </Routes>
   </BrowserRouter>
 	);

@@ -1,8 +1,12 @@
 import { Image, Box, Center, Button } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import BackendStatus from '../components/ServerStatus';
-import { BackendStatusInterface } from '../conf/backendStatus'
-import { CSSProperties, FC } from 'react'
+import { apiRootPath, BackendStatusInterface } from '../conf/backendStatus'
+import { CSSProperties, FC, useEffect } from 'react'
+import { isConnected } from '../app/Auth'
+import useCurrentAccount from '../services/CurrentAccountContext'
+import computeLogout from '../services/logoutAccount'
+import LoadingPage from '../components/LoadingPage'
 
 const paginationButtonDisabledStyle: CSSProperties = {
   padding: '10px 20px',
@@ -20,6 +24,7 @@ type Props = {
 }
 
 const HomeView: FC<Props> = ({backendStatus}) => {
+  const { currentAccount, setCurrentAccount } = useCurrentAccount()
 	const navigate = useNavigate();
 	const backIsUp: boolean = backendStatus.status === 'Running'
 	const handleStatistics = () => {
@@ -31,7 +36,21 @@ const HomeView: FC<Props> = ({backendStatus}) => {
   const handleNews = () => {
     navigate('/news')
   }
+  const handleLogout = () => {
+    return computeLogout().then((status) => {
+      setCurrentAccount(null)
+    })
+  }
 
+  useEffect(() => {
+    if (currentAccount == null) {
+      navigate('/login')
+    }
+  }, [currentAccount])
+
+  if (currentAccount == null) {
+    return <LoadingPage/>
+  }
 	return (
   <Box backgroundSize={'cover'} h={'calc(100vh)'}>
     <Center>
@@ -67,6 +86,16 @@ const HomeView: FC<Props> = ({backendStatus}) => {
       (
         <Button backgroundColor={'#d85444'} colorScheme={'red'} size={'lg'} onClick={handleNews}>
           Gestion des articles
+        </Button>
+      )
+        : <button style={paginationButtonDisabledStyle}>Gestion des articles</button>
+      }
+    </Center>
+    <Center marginTop={'1%'}>
+      {backIsUp ?
+      (
+        <Button backgroundColor={'#d85444'} colorScheme={'red'} size={'lg'} onClick={handleLogout}>
+          Se déconnecter
         </Button>
       )
         : <button style={paginationButtonDisabledStyle}>Gestion des articles</button>

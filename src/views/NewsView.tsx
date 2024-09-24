@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router'
 import { apiRootPath } from '../conf/backendStatus';
+import useCurrentAccount from '../services/CurrentAccountContext'
+import LoadingPage from '../components/LoadingPage'
 
 interface Article {
   id: number;
@@ -29,6 +32,8 @@ const HandleNews: React.FC = () => {
   const [newImage, setNewImage] = useState('');
   const [newArticleUrl, setNewArticleUrl] = useState('');
   const [newLogoUrl, setNewLogoUrl] = useState('');
+  const navigate = useNavigate();
+  const { currentAccount } = useCurrentAccount()
 
   useEffect(() => {
     fetchArticles().then((fetchedArticles) => {
@@ -82,6 +87,17 @@ const HandleNews: React.FC = () => {
     }
   };
 
+  console.log(JSON.stringify(articles, null, 2))
+
+  useEffect(() => {
+    if (currentAccount == null) {
+      navigate('/login')
+    }
+  }, [currentAccount])
+
+  if (currentAccount == null) {
+    return <LoadingPage/>
+  }
   return (
     <div style={{ padding: '20px' }}>
       <div>

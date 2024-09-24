@@ -1,5 +1,6 @@
 import React from 'react';
 import { BackendStatusInterface } from '../conf/backendStatus'
+import LoadingPage from './LoadingPage'
 
 type Props = {
 	backendStatus: BackendStatusInterface
@@ -28,7 +29,7 @@ const BackendStatus: React.FC<Props> = ({backendStatus}) => {
           </span>
         </div>
       ) : (
-        <div>Loading...</div>
+        <LoadingPage/>
       )}
     </div>
   );

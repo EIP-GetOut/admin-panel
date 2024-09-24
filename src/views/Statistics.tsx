@@ -1,6 +1,9 @@
 import { Box, Button, Center } from '@chakra-ui/react';
 import { FC, useEffect, useState } from 'react';
 import { apiRootPath } from '../conf/backendStatus'
+import { useNavigate } from 'react-router'
+import useCurrentAccount from '../services/CurrentAccountContext'
+import LoadingPage from '../components/LoadingPage'
 
 async function fetchData(): Promise<number> {
   try {
@@ -132,12 +135,14 @@ const handleSaveDatas = async (nbAccounts: number, nbAccountsRealTime: number, n
   document.body.removeChild(link);
 }
 
-const PlaygroundView = () => {
+const PlaygroundView: React.FC = () => {
+  const navigate = useNavigate();
+  const { currentAccount } = useCurrentAccount()
+
   const [nbAccounts, setNbAccounts] = useState<number | null>(null);
   const [nbAccountsRealTime, setNbAccountsRealTime] = useState<number | null>(null);
   const [nbAccountsCreatedWeekBefore, setNbAccountCreatedWeekBefore] = useState<number | null>(null);
   const [nbRecomendationsGenerated, setNbRecomendationGeberated] = useState<number | null>(null);
-
 
   useEffect(() => {
     fetchData().then((nbAccounts) => {
@@ -154,17 +159,15 @@ const PlaygroundView = () => {
     });
   }, []);
 
-  if (nbAccounts === null) {
-    return (<p>Loading...</p>);
-  }
-  if (nbAccountsRealTime === null ) {
-    return (<p>Loading...</p>);
-  }
-  if (nbAccountsCreatedWeekBefore === null) {
-    return (<p>Loading...</p>);
-  }
-  if (nbRecomendationsGenerated === null ) {
-    return (<p>Loading...</p>);
+  useEffect(() => {
+    if (currentAccount == null) {
+      navigate('/login')
+    }
+  }, [currentAccount])
+
+  if (currentAccount == null || nbAccounts === null || nbAccountsRealTime === null
+      || nbAccountsCreatedWeekBefore === null || nbRecomendationsGenerated === null) {
+    return <LoadingPage/>
   }
 
   return (

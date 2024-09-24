@@ -4,6 +4,9 @@ import React, { useState, useEffect, CSSProperties } from 'react';
 import SignUpForm from './SignupForm';
 
 import { apiRootPath } from '../conf/backendStatus';
+import { useNavigate } from 'react-router'
+import useCurrentAccount from '../services/CurrentAccountContext'
+import LoadingPage from '../components/LoadingPage'
 
 type User = {
   id: string;
@@ -338,6 +341,19 @@ const UserTable: React.FC = () => {
 };
 
 const UserOverview: React.FC = () => {
+  const navigate = useNavigate();
+  const { currentAccount } = useCurrentAccount()
+
+  useEffect(() => {
+    if (currentAccount == null) {
+      navigate('/login')
+    }
+  }, [currentAccount])
+
+  if (currentAccount == null) {
+    return <LoadingPage/>
+  }
+
   return (
     <Box>
       <div>
