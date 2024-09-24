@@ -33,7 +33,8 @@ const Router = () => {
       }
     };
 
-    isSubscribed && setBackendStatus({ status: 'Running', version: 'v0.6.5' });
+    // isSubscribed && setBackendStatus({ status: 'Running', version: 'v0.6.5' });
+    fetchBackendStatus()
 
     return () => {isSubscribed = false}
   }, [])
