@@ -61,14 +61,24 @@ const HandleNews: React.FC = () => {
         sourceLogo: newLogoUrl,
       };
 
-      let updatedArticles;
+      let updatedArticles: Article[];
       if (editMode && editArticleId !== null) {
         updatedArticles = articles.map(article =>
           article.id === editArticleId ? updatedArticle : article
         );
+        fetch(`${apiRootPath}/news`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(updatedArticles),
+        })
+          .then(() => {
+            console.log('Article modifié');
+            setArticles(updatedArticles);
+          })
+          .catch(err => console.error(err));
       } else {
         updatedArticles = [...articles, updatedArticle];
-        fetch(`${apiRootPath}/news/api`, {
+        fetch(`${apiRootPath}/news`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(updatedArticle),
@@ -76,7 +86,6 @@ const HandleNews: React.FC = () => {
           .then(() => console.log('Article ajouté'))
           .catch(err => console.error(err));
       }
-      setArticles(updatedArticles);
       setShowAddPopup(false);
       setEditMode(false);
       setEditArticleId(null);
@@ -126,62 +135,34 @@ const HandleNews: React.FC = () => {
       </div>
 
       {showAddPopup && (
-        <div style={{ marginTop: '20px', border: '2px solid #007bff', padding: '20px', borderRadius: '8px' }}>
+        <div style={{ marginTop: '20px', border: '1px solid #ccc', padding: '10px', borderRadius: '5px' }}>
           <input
             type={'text'}
             placeholder={'Titre'}
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
-            style={{
-              display: 'block',
-              marginBottom: '10px',
-              width: '100%',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              padding: '10px',
-            }}
+            style={{ display: 'block', marginBottom: '10px', width: '100%', border: '1px solid #ccc', padding: '8px' }}
           />
           <input
             type={'text'}
             placeholder={"URL de l'image"}
             value={newImage}
             onChange={(e) => setNewImage(e.target.value)}
-            style={{
-              display: 'block',
-              marginBottom: '10px',
-              width: '100%',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              padding: '10px',
-            }}
+            style={{ display: 'block', marginBottom: '10px', width: '100%', border: '1px solid #ccc', padding: '8px' }}
           />
           <input
             type={'text'}
             placeholder={"URL de l'article"}
             value={newArticleUrl}
             onChange={(e) => setNewArticleUrl(e.target.value)}
-            style={{
-              display: 'block',
-              marginBottom: '10px',
-              width: '100%',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              padding: '10px',
-            }}
+            style={{ display: 'block', marginBottom: '10px', width: '100%', border: '1px solid #ccc', padding: '8px' }}
           />
           <input
             type={'text'}
             placeholder={'URL du logo'}
             value={newLogoUrl}
             onChange={(e) => setNewLogoUrl(e.target.value)}
-            style={{
-              display: 'block',
-              marginBottom: '10px',
-              width: '100%',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              padding: '10px',
-            }}
+            style={{ display: 'block', marginBottom: '10px', width: '100%', border: '1px solid #ccc', padding: '8px' }}
           />
           <button onClick={saveArticle} style={{ marginRight: '10px' }}>
             {editMode ? 'Modifier' : 'Ajouter'}
