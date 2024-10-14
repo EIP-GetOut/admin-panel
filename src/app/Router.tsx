@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react'
 import { BackendStatusInterface, apiRootPath } from '../conf/backendStatus'
 import useCurrentAccount from '../services/CurrentAccountContext'
 import LoadingPage from '../components/LoadingPage'
-import HomeIcon from '../components/Navigate';
+import HomeButton from '../components/Navigate';
 
 
 const Router = () => {
@@ -47,20 +47,16 @@ const Router = () => {
 
 	return (
   <BrowserRouter>
-    <div style={{ paddingTop: '60px' }}>
-      <HomeIcon />
-      <div style={{ marginTop: '20px' }}>
-        <Routes>
-          <Route path={'/'} element={<HomeView backendStatus={backendStatus} />} />
-          <Route path={'/login'} element={<LoginView />} />
-          <Route path={'/user-overview'} element={<UserOverview />} />
-          <Route path={'/statistics'} element={<StatisticsView />} />
-          <Route path={'/moderation'} element={<ModerationView />} />
-          <Route path={'/history'} element={<HistoryView />} />
-          <Route path={'/news'} element={<NewsView />} />
-        </Routes>
-      </div>
-    </div>
+    <HomeButton />
+    <Routes>
+      <Route path={'/'} element={<HomeView backendStatus={backendStatus} />} />
+      <Route path={'/login'} element={<LoginView />} />
+      <Route path={'/user-overview'} element={<UserOverview />} />
+      <Route path={'/statistics'} element={<StatisticsView />} />
+      <Route path={'/moderation'} element={<ModerationView />} />
+      <Route path={'/history'} element={<HistoryView />} />
+      <Route path={'/news'} element={<NewsView />} />
+    </Routes>
   </BrowserRouter>
   );
 };
