@@ -70,8 +70,8 @@ const BarChart: FC<BarChartProps> = ({ lastWeekCount, thisWeekCount }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '400px', height: '300px', border: '1px solid #000', padding: '20px', marginLeft: '750px', marginRight: '750px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginBottom: '10px' }}>
-        <div>Last week</div>
-        <div>This week</div>
+        <div>Semaine dernière</div>
+        <div>Cette semaine</div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
         <div style={{ width: '50px', backgroundColor: '#007bff', textAlign: 'center', color: '#fff', fontSize: '14px', height: calculateHeight(lastWeekCount), transition: 'height 0.5s ease', marginBottom: '10px', marginTop: '10px' }}>

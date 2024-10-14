@@ -244,7 +244,7 @@ const UserTable: React.FC = () => {
         <Modal isOpen={!!viewUser} onClose={() => setViewUser(null)}>
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>Details for {viewUser.firstName} {viewUser.lastName}</ModalHeader>
+            <ModalHeader>Détails de {viewUser.firstName} {viewUser.lastName}</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               <Text><strong>Email:</strong> {viewUser.email}</Text>
