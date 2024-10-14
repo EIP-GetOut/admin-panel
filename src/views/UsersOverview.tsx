@@ -1,38 +1,58 @@
-import { Box } from '@chakra-ui/react';
-import { EditIcon } from '@chakra-ui/icons'
+import { Box, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, Text, Button } from '@chakra-ui/react';
+import { EditIcon, ViewIcon } from '@chakra-ui/icons';
 import React, { useState, useEffect, CSSProperties } from 'react';
 import SignUpForm from './SignupForm';
-
 import { apiRootPath } from '../conf/backendStatus';
 import { useNavigate } from 'react-router'
 import useCurrentAccount from '../services/CurrentAccountContext'
 import LoadingPage from '../components/LoadingPage'
+
+type Role = {
+  id: string;
+  permissions: number;
+  name: string;
+  description: string;
+}
+
+type Preferences = {
+  platforms: Array<string>;
+  booksGenres: Array<string>;
+  moviesGenres: Array<string>;
+}
 
 type User = {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
+  preferences?: Preferences;
+  createdDate?: Date;
+  role?: Role;
+  modifiedDate?: string;
+  isVerified?: boolean;
+  welcomeEmailSent?: boolean;
 };
 
 type ApiResponse = {
   accounts: {
-    list: {
-      id: string;
-      email: string;
-      firstName: string;
-      lastName: string;
-    }[];
+    list: User[];
     accountCreatedLastWeek: number;
   };
 };
 
 function extractUserInfo(response: ApiResponse): User[] {
+  console.log(response.accounts.list)
   return response.accounts.list.map(account => ({
     id: account.id,
     firstName: account.firstName,
     lastName: account.lastName,
     email: account.email,
+    preferences: account.preferences,
+    createdDate: account.createdDate,
+    role: account.role,
+    modifiedDate: account.modifiedDate || 'N/A',
+    isVerified: account.isVerified || false,
+    welcomeEmailSent: account.welcomeEmailSent || false
   }));
 }
 
@@ -43,6 +63,7 @@ const UserTable: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [editUserId, setEditUserId] = useState<string | null>(null);
   const [editUser, setEditUser] = useState<User | null>(null);
+  const [viewUser, setViewUser] = useState<User | null>(null); // For viewing details
 
   const openModal = () => {
     setShowModal(true);
@@ -94,6 +115,10 @@ const UserTable: React.FC = () => {
     setEditUser({ ...user });
   };
 
+  const handleView = (user: User): void => {
+    setViewUser(user); // Set the user to be viewed
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (editUser) {
       setEditUser({ ...editUser, [e.target.name]: e.target.value });
@@ -130,67 +155,15 @@ const UserTable: React.FC = () => {
     fetchUsers(page);
   }, [page]);
 
-  const tableStyle: CSSProperties = {
-    width: '100%',
-    borderCollapse: 'collapse',
-    marginTop: '20px',
-  };
-
-  const thTdStyle: CSSProperties = {
-    border: '1px solid #ddd',
-    padding: '8px',
-  };
-
-  const thStyle: CSSProperties = {
-    backgroundColor: '#f2f2f2',
-  };
-
-  const buttonStyle: CSSProperties = {
-    padding: '5px 10px',
-    color: 'white',
-    backgroundColor: 'red',
-    border: 'none',
-    cursor: 'pointer',
-    marginRight: '5px',
-  };
-
-  const buttonHoverStyle: CSSProperties = {
-    backgroundColor: 'darkred',
-  };
-
-  const paginationButtonStyle: CSSProperties = {
-    padding: '10px 20px',
-    margin: '0 10px',
-    backgroundColor: '#007bff',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    fontSize: '16px',
-  };
-
-  const paginationButtonDisabledStyle: CSSProperties = {
-    ...paginationButtonStyle,
-    backgroundColor: '#d3d3d3',
-    cursor: 'not-allowed',
-  };
-
-  const paginationContainerStyle: CSSProperties = {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: '20px',
-  };
-
   return (
     <div>
-      <table style={tableStyle}>
+      <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '20px' }}>
         <thead>
           <tr>
-            <th style={{ ...thTdStyle, ...thStyle }}>Prénom</th>
-            <th style={{ ...thTdStyle, ...thStyle }}>Nom de famille</th>
-            <th style={{ ...thTdStyle, ...thStyle }}>Adresse email</th>
-            <th style={{ ...thTdStyle, ...thStyle }}>Actions</th>
+            <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2' }}>Prénom</th>
+            <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2' }}>Nom de famille</th>
+            <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2' }}>Adresse email</th>
+            <th style={{ border: '1px solid #ddd', padding: '8px', backgroundColor: '#f2f2f2' }}>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -198,7 +171,7 @@ const UserTable: React.FC = () => {
             <tr key={user.id}>
               {editUserId === user.id ? (
                 <>
-                  <td style={thTdStyle}>
+                  <td style={{ border: '1px solid #ddd', padding: '8px' }}>
                     <input
                       type={'text'}
                       name={'firstName'}
@@ -206,7 +179,7 @@ const UserTable: React.FC = () => {
                       onChange={handleInputChange}
                     />
                   </td>
-                  <td style={thTdStyle}>
+                  <td style={{ border: '1px solid #ddd', padding: '8px' }}>
                     <input
                       type={'text'}
                       name={'lastName'}
@@ -214,7 +187,7 @@ const UserTable: React.FC = () => {
                       onChange={handleInputChange}
                     />
                   </td>
-                  <td style={thTdStyle}>
+                  <td style={{ border: '1px solid #ddd', padding: '8px' }}>
                     <input
                       type={'email'}
                       name={'email'}
@@ -222,15 +195,15 @@ const UserTable: React.FC = () => {
                       onChange={handleInputChange}
                     />
                   </td>
-                  <td style={thTdStyle}>
+                  <td style={{ border: '1px solid #ddd', padding: '8px' }}>
                     <button
-                      style={{ ...buttonStyle, backgroundColor: 'green', marginRight: '10px' }}
+                      style={{ backgroundColor: 'green', color: 'white', marginRight: '10px', padding: '5px 10px' }}
                       onClick={handleValidate}
                     >
                       Valider
                     </button>
                     <button
-                      style={{ ...buttonStyle, backgroundColor: 'red' }}
+                      style={{ backgroundColor: 'red', color: 'white', padding: '5px 10px' }}
                       onClick={handleCancelEdit}
                     >
                       Annuler
@@ -239,14 +212,12 @@ const UserTable: React.FC = () => {
                 </>
               ) : (
                 <>
-                  <td style={thTdStyle}>{user.firstName}</td>
-                  <td style={thTdStyle}>{user.lastName}</td>
-                  <td style={thTdStyle}>{user.email}</td>
-                  <td style={thTdStyle}>
+                  <td style={{ border: '1px solid #ddd', padding: '8px' }}>{user.firstName}</td>
+                  <td style={{ border: '1px solid #ddd', padding: '8px' }}>{user.lastName}</td>
+                  <td style={{ border: '1px solid #ddd', padding: '8px' }}>{user.email}</td>
+                  <td style={{ border: '1px solid #ddd', padding: '8px' }}>
                     <button
-                      style={buttonStyle}
-                      onMouseOver={e => (e.currentTarget.style.backgroundColor = buttonHoverStyle.backgroundColor!)}
-                      onMouseOut={e => (e.currentTarget.style.backgroundColor = buttonStyle.backgroundColor!)}
+                      style={{ padding: '5px 10px', color: 'white', backgroundColor: 'red', border: 'none', cursor: 'pointer', marginRight: '5px' }}
                       onClick={() => handleDelete(user.id)}
                     >
                       Supprimer
@@ -256,6 +227,10 @@ const UserTable: React.FC = () => {
                       color={'black'}
                       onClick={() => handleEdit(user)}
                     />
+                    <ViewIcon
+                      style={{ marginLeft: '10px', cursor: 'pointer' }}
+                      onClick={() => handleView(user)}
+                    />
                   </td>
                 </>
               )}
@@ -263,23 +238,40 @@ const UserTable: React.FC = () => {
           ))}
         </tbody>
       </table>
-      <div style={paginationContainerStyle}>
-        <button
-          onClick={() => setPage(page - 1)}
-          disabled={page === 1}
-          style={page === 1 ? paginationButtonDisabledStyle : paginationButtonStyle}
-        >
-          Previous
-        </button>
-        <span style={{ margin: '0 10px', fontSize: '16px' }}>Page {page}</span>
-        <button
-          onClick={() => !isLastPage && setPage(page + 1)}
-          disabled={isLastPage}
-          style={isLastPage ? paginationButtonDisabledStyle : paginationButtonStyle}
-        >
-          Next
-        </button>
-      </div>
+
+      {/* View User Details Modal */}
+      {viewUser && (
+        <Modal isOpen={!!viewUser} onClose={() => setViewUser(null)}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Details for {viewUser.firstName} {viewUser.lastName}</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Text><strong>Email:</strong> {viewUser.email}</Text>
+              <Text><strong>First Name:</strong> {viewUser.firstName}</Text>
+              <Text><strong>Last Name:</strong> {viewUser.lastName}</Text>
+              <Text><strong>Preferences:</strong></Text>
+              <Text style={{marginLeft: '25px'}}>
+                <div>
+                  <strong>Platforms: </strong> {viewUser.preferences?.platforms.join(', ')}
+                </div>
+                <div>
+                  <strong>Book Genres: </strong> {viewUser.preferences?.booksGenres.join(', ')}
+                </div>
+                <div>
+                  <strong>Movie Genres: </strong> {viewUser.preferences?.moviesGenres.join(', ')}
+                </div>
+              </Text>
+              <Text><strong>Creation Date:</strong> {viewUser.createdDate ? new Date(viewUser.createdDate).toLocaleDateString() : 'N/A'}</Text>
+              <Text><strong>Role:</strong> {viewUser.role?.name ? viewUser.role.name : 'User'}</Text>
+              <Text><strong>Modify Date:</strong> {viewUser.modifiedDate ? new Date(viewUser.modifiedDate).toLocaleDateString() : 'N/A'}</Text>
+              <Text><strong>Is Verified:</strong> {viewUser.isVerified ? 'Yes' : 'No'}</Text>
+              <Text><strong>Welcome Email Sent:</strong> {viewUser.welcomeEmailSent ? 'Yes' : 'No'}</Text>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      )}
+
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
         <button
           style={{
